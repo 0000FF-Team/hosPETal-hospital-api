@@ -2,23 +2,30 @@ package com.hospetal.hospital.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hospetal.hospital.dto.request.HospitalPostRequestDto;
+import com.hospetal.hospital.service.HospitalService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest
+@WebMvcTest(HospitalController.class)
 class HospitalControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockBean
+    private HospitalService hospitalService;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -47,7 +54,9 @@ class HospitalControllerTest {
                         .content(postRequestContent)
                 )
                 .andExpect(status().isCreated())
-                .andExpect(content().string("{}"))
+                .andExpect(content().string(""))
                 .andDo(print());
+
+        verify(hospitalService).addHospital(any(HospitalPostRequestDto.class));
     }
 }

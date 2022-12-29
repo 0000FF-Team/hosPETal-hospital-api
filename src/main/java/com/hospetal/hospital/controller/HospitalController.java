@@ -1,17 +1,21 @@
 package com.hospetal.hospital.controller;
 
 import com.hospetal.hospital.dto.request.HospitalPostRequestDto;
+import com.hospetal.hospital.service.HospitalService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Map;
 
 @Slf4j
+@RequiredArgsConstructor
 @RequestMapping("/hospitals")
 @RestController
 public class HospitalController {
+
+    private final HospitalService hospitalService;
 
     @GetMapping
     public String get() {
@@ -20,7 +24,7 @@ public class HospitalController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Map<String, String> post(@Valid @RequestBody HospitalPostRequestDto postRequestDto) {
-        return Map.of();
+    public String post(@Valid @RequestBody HospitalPostRequestDto requestDto) {
+        return hospitalService.addHospital(requestDto);
     }
 }
