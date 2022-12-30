@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class HospitalService {
-    public String addHospital(HospitalPostRequestDto requestDto) {
-        return null;
+    public Long addHospital(HospitalPostRequestDto requestDto) {
+        return 1L;
     }
 }

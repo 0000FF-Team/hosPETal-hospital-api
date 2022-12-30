@@ -13,10 +13,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 
 @WebMvcTest(HospitalController.class)
 class HospitalControllerTest {
@@ -41,22 +42,29 @@ class HospitalControllerTest {
     }
 
     @Test
-    @DisplayName("/hospitals 요청 시 {}을 출력한다")
+    @DisplayName("POST /hospitals 요청 시 등록된 ID를 리턴한다")
     void post() throws Exception {
-        String postRequestContent = objectMapper.writeValueAsString(
-                HospitalPostRequestDto.builder()
-                        .name("블루동물병원")
-                        .description("블루동물병원입니다")
-                        .build());
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/hospitals")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(postRequestContent)
+        HospitalPostRequestDto requestDto = generateHospitalPostRequestDto();
+        given(hospitalService.addHospital(any(HospitalPostRequestDto.class)))
+                .willReturn(3L);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders.post("/hospitals")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(requestDto))
                 )
                 .andExpect(status().isCreated())
-                .andExpect(content().string(""))
+                .andExpect(content().string("3"))
                 .andDo(print());
 
         verify(hospitalService).addHospital(any(HospitalPostRequestDto.class));
+    }
+
+    private static HospitalPostRequestDto generateHospitalPostRequestDto() {
+        return HospitalPostRequestDto.builder()
+                .name("블루동물병원")
+                .description("블루동물병원입니다")
+                .build();
     }
 }

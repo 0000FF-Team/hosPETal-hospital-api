@@ -24,7 +24,7 @@ public class HospitalController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public String post(@Valid @RequestBody HospitalPostRequestDto requestDto) {
+    public Long post(@Valid @RequestBody HospitalPostRequestDto requestDto) {
         return hospitalService.addHospital(requestDto);
     }
 }
