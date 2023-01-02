@@ -61,10 +61,30 @@ class HospitalControllerTest {
         verify(hospitalService).addHospital(any(HospitalPostRequestDto.class));
     }
 
+    @Test
+    @DisplayName("POST /hospitals 요청 시 DB에 값이 저장된다")
+    void save_to_db_after_post_request() throws Exception {
+
+        HospitalPostRequestDto requestDto = generateHospitalPostRequestDto();
+        given(hospitalService.addHospital(any(HospitalPostRequestDto.class)))
+                .willReturn(3L);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders.post("/hospitals")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(requestDto))
+                )
+                .andExpect(status().isCreated())
+                .andExpect(content().string("3"))
+                .andDo(print());
+
+        verify(hospitalService).addHospital(any(HospitalPostRequestDto.class));
+    }
     private static HospitalPostRequestDto generateHospitalPostRequestDto() {
         return HospitalPostRequestDto.builder()
                 .name("블루동물병원")
                 .description("블루동물병원입니다")
+                .contactNumber("0329997777")
                 .build();
     }
 }
