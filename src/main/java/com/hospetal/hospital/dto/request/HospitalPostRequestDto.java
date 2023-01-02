@@ -18,5 +18,6 @@ public class HospitalPostRequestDto {
     private String name;
     @NotEmpty(message = "병원 소개를 입력해주세요.")
     private String description;
-
+    @NotBlank(message = "병원 전화번호를 입력해주세요.")
+    private String contactNumber;
 }
