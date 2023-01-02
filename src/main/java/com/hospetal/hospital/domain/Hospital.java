@@ -25,7 +25,8 @@ public class Hospital {
     private String contactNumber;
 
     @Builder
-    public Hospital(String name, String description, String contactNumber) {
+    public Hospital(Long id, String name, String description, String contactNumber) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.contactNumber = contactNumber;
